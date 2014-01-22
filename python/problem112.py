@@ -1,4 +1,4 @@
-66420#!/usr/bin/python -tt
+#!/usr/bin/python -tt
 '''
     problem 112: http://projecteuler.net/problem=112
 '''
