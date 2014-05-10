@@ -6,6 +6,7 @@
 
 
 from fractions import Fraction
+import itertools
 import sys
 
 
@@ -41,42 +42,43 @@ assert get_root_as_cont_frac(114) == (10, (1, 2, 10, 2, 1, 20))
 
 
 def convergence_sequence_from_cont_frac(cont_frac):
-  aproximations = []
-  for aprox_depth in range(len(cont_frac[1])):
-    partial_cont_frac = cont_frac[1][:aprox_depth+1]
-    # note: process the continuos fraction components backwards.
-    #       the odd looking lambda and default 0 value cover cases where
-    #       there's only 1 continuous fraction component without dividing by 0.
+  ''' generate increasingly accurate approximations of a continuous fraction.
+      process the fraction components backwards. '''
+  for aprox_depth in itertools.count(1):
+    # create an iterator over the fraction, then evaluate it at ever increasing depth
+    partial_cont_frac = list(itertools.islice(itertools.cycle(cont_frac[1]), aprox_depth))
     aprox_frac = reduce(lambda a0, a1: (a0 and Fraction(1, a0) or 0) + Fraction(a1, 1), partial_cont_frac[::-1], 0)**-1
-    aprox = cont_frac[0] + aprox_frac          
-    aproximations.append(aprox)
-  return tuple(aproximations)
+    aprox = cont_frac[0] + aprox_frac
+    yield aprox
 
 
 # test
-assert convergence_sequence_from_cont_frac(get_root_as_cont_frac(14)) == \
-                        (Fraction(4, 1), Fraction(11, 3), Fraction(15, 4), Fraction(101, 27))
+#assert convergence_sequence_from_cont_frac(get_root_as_cont_frac(2))  == (Fraction(3, 2),)
+#assert convergence_sequence_from_cont_frac(get_root_as_cont_frac(14)) == (Fraction(4, 1),
+#                                                                          Fraction(11, 3),
+#                                                                          Fraction(15, 4),
+#                                                                          Fraction(101, 27))
 
 
 def diophantine(x, y, D):
-    return x**2 - D * y**2
+    ''' used to check if continuous fraction convergents
+        actually solve this diophantine equation '''
+    return x**2 - D * y**2 == 1
 
 
 def get_minimal_diophantine_x(D):
-  print 'solving: D == {0}\n'.format(D)
-
-  # get square root D's continued fraction representation
+  
+  # get root(D) as a continued fraction
   cont_frac = get_root_as_cont_frac(D)
 
-  # and pair up convergents in the series
+  # create a convergent iterator
   convergents = convergence_sequence_from_cont_frac(cont_frac)
 
-  #
-
-  # plug in convergent fractions as (x, y)
-  sys.exit()
-
-  return 1
+  # plug in the fractions as (x, y)
+  for c in convergents:
+      x, y = c.numerator, c.denominator
+      if diophantine(x, y, D):
+        return x
 
 
 # test
@@ -85,17 +87,15 @@ assert get_minimal_diophantine_x(3) == 2
 assert get_minimal_diophantine_x(5) == 9
 assert get_minimal_diophantine_x(6) == 5
 assert get_minimal_diophantine_x(7) == 8
-
 assert get_minimal_diophantine_x(13) == 649
 
 
 # 
-max_D = 7
+max_D = 10**3
+
 
 # get non-squares less than max_D
 d_list = filter(lambda i: (round(i**.5))**2 != i, range(2, max_D+1))
-
-print '\nd_list: {0}\n'.format(d_list)
 
 
 # map each equation parameter D to its minimal solution, (D, minimal_x)
