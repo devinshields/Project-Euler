@@ -8,7 +8,9 @@ import euler
 
 
 def count(S, m, n):
-  ''' S - ascending list of globally available integer components (coins)
+  ''' source: http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
+  
+      S - ascending list of globally available integer components (coins)
       m - index into S[]. S[:m] is the set of allowed components for this run
       n - target value for this run
 
