@@ -144,19 +144,49 @@ brute force solution up to max_n: 10**8, took: 77 seconds
 
 
 We're now quite sure that a guess-and-check strategy isn't viable for `n` >= 10^7.
-Given prior experience with Project Euler, this problem is firing all my neurons
-connected to the [On-Line Encyclopedia of Integer Sequences](https://oeis.org/).
+I don't have a strong hunch as to an analytical solution, but all the neurons
+I've trained to recognize integer sequences are signaling at maximum frequency.
 
-The solution sequence above for `n` and `b` are:
+The valid value sequences for `n` and `b` (shown above) are:
 
-* `n: `
-
-
-
+* `n: 4, 21, 120, 697, 4060, 23661, 137904, 803761, 4684660, 27304197`
+* `b: 3, 15, 85, 493, 2871, 16731, 97513, 568345, 3312555, 19306983`
 
 
+A [search at oeis.org](https://oeis.org/search?q=4%2C+21%2C+120%2C+697%2C+4060%2C+23661%2C+137904%2C+803761%2C+4684660%2C+27304197&language=english&go=Search) for valid values of `n` returns...
 
 
+## A Hit, Captain!
+
+![image](https://user-images.githubusercontent.com/1356969/74901283-6427e480-5370-11ea-8db7-ba688a4bacdc.png)
+
+
+
+### the solution
+
+
+* assuming the only thing needed to generate a valid solution is [integer sequence `A046090`](https://oeis.org/A046090):
+
+
+```
+>>> from solve_100 import blue_disks, prob_of_bb
+>>> 
+>>> n_candidates = [4, 21, 120, 697, 4060, 23661, 137904, 803761, 4684660, 27304197, 159140520, 927538921, 5406093004, 31509019101, 183648021600, 1070379110497, 6238626641380, 36361380737781, 211929657785304, 1235216565974041]
+>>> 
+>>> for n in n_candidates:
+...     b = blue_disks(n)
+...     if (prob_of_bb(n, b) == .5) and (n >= 10**12):
+...         print('Project Euler Problem #100 Solution: {} blue disks'.format(b))
+...         break
+... 
+Project Euler Problem #100 Solution: 756872327473 blue disks
+```
+
+### Bingo. and Rats
+
+* Apparently this is the hardest Project Euler problem-solution you're allowed to share publicly without breaking the rules :-( . Thanks for reading!
+
+![image](https://user-images.githubusercontent.com/1356969/74902176-3e500f00-5373-11ea-8f02-70cad29fb719.png)
 
 
 

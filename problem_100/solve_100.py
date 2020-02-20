@@ -33,14 +33,16 @@ def test_prob_of_bb():
     assert .5 == prob_of_bb(120, 85)
 
 
-def solve_100(max_n=10**7):
+def solve_100(max_n):
     """
     """
     for n in range(3, max_n):
         b = blue_disks(n)
         p = prob_of_bb(n, b)
         if p == .5:
-            print('n: {}, b: {}, p: {}'.format(n, b, p))
+            #print('n: {}, b: {}, p: {}'.format(n, b, p))
+            #print(n)
+            print(b)
             if n >= 10**12:
                 print('Project Euler Problem #100 Solution: {} blue disks'.format(b))
 
@@ -49,7 +51,7 @@ def brute_force():
     """
     """
     t0 = time.time()
-    max_n_exp = 8
+    max_n_exp = 7
     max_n = 10**max_n_exp
     solve_100(max_n)
     t1 = time.time()
