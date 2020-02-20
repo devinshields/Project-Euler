@@ -1,0 +1,10 @@
+name: euler
+dependencies:
+  - python=3.6
+  - jupyter
+  - matplotlib
+  - numpy
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
